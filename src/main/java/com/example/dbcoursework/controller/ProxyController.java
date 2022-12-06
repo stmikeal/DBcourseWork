@@ -2,6 +2,7 @@ package com.example.dbcoursework.controller;
 
 import com.example.dbcoursework.entity.Claim;
 import com.example.dbcoursework.entity.local.*;
+import com.example.dbcoursework.repository.ClaimRepository;
 import com.example.dbcoursework.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ public class ProxyController {
     private final OrganizationService organizationService;
     private final RoleService roleService;
     private final ClaimService claimService;
+    private final ClaimRepository claimRepository;
 
     @GetMapping("/registered")
     public ResponseEntity<String> isPersonRegistered(@RequestParam("name") String name,
@@ -101,5 +103,11 @@ public class ProxyController {
             return claimService.getAnswerById(secureEntity.getLogin(), claimId).orElse(null);
         }
         return null;
+    }
+
+    @GetMapping("/ping")
+    public ResponseEntity<String> ping() {
+        String r = claimRepository.findAll().get(0).getData();
+        return ResponseEntity.ok().body(r);
     }
 }

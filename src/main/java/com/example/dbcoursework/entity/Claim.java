@@ -1,42 +1,41 @@
 package com.example.dbcoursework.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
-
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(name = "claim")
 @Getter
 @Setter
-@Table(name = "claim")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Claim {
     @Id
-    Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(name = "pair")
-    Long pair;
+    private Long pair;
 
     @Column(name = "status")
-    Long status;
+    private Long status;
 
     @Column(name = "type")
-    Long type;
+    private Long type;
 
     @Column(name = "member_in")
-    Long memberId;
+    private Long memberIn;
 
     @Column(name = "member_out")
-    Long memberOut;
+    private Long memberOut;
 
     @Column(name = "data")
-    String data;
+    private String data;
 
     @Column(name = "created_date")
-    LocalDateTime createdDate;
+    private LocalDateTime createdDate;
 }
