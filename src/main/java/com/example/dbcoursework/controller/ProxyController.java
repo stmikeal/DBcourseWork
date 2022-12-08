@@ -19,7 +19,6 @@ public class ProxyController {
     private final OrganizationService organizationService;
     private final RoleService roleService;
     private final ClaimService claimService;
-    private final ClaimRepository claimRepository;
 
     @GetMapping("/registered")
     public ResponseEntity<String> isPersonRegistered(@RequestParam("name") String name,

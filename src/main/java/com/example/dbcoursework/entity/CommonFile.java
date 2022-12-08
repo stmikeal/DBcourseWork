@@ -1,9 +1,6 @@
 package com.example.dbcoursework.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -14,6 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 public class CommonFile {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @Column(name = "claim_ref")
