@@ -5,12 +5,14 @@ import com.example.dbcoursework.entity.local.*;
 import com.example.dbcoursework.repository.ClaimRepository;
 import com.example.dbcoursework.service.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 @RequestMapping("/api/proxy")
 public class ProxyController {
 
@@ -89,7 +91,8 @@ public class ProxyController {
     @ResponseBody
     public Claim getLastAnswer(@RequestBody SecureEntity secureEntity) {
         if (secureService.checkAuthorization(secureEntity)) {
-            return claimService.getLastAnswer(secureEntity.getLogin()).orElse(null);
+            Claim claim = claimService.getLastAnswer(secureEntity.getLogin()).orElse(null);
+            return claim;
         }
         return null;
     }

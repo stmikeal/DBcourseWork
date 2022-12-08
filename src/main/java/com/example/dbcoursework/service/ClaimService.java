@@ -38,7 +38,6 @@ public class ClaimService {
         Claim origin = claimRepository.findById(responseId).orElse(null);
         if (origin == null) return false;
         origin.setStatus(ClaimStatusDict.DONE.id);
-        origin = claimRepository.save(origin);
         Claim response = new Claim();
         response.setData(claimEntity.getData());
         response.setMemberIn(origin.getMemberOut());
@@ -46,8 +45,12 @@ public class ClaimService {
         response.setCreatedDate(LocalDateTime.now());
         response.setType(origin.getType());
         response.setStatus(ClaimStatusDict.NEW.id);
-        claimRepository.save(response);
-        return false;
+        response.setPair(responseId);
+        response = claimRepository.save(response);
+        origin.setPair(response.getId());
+        claimRepository.save(origin);
+
+        return true;
     }
 
     public Optional<Claim> getLastAnswer(String login) {
@@ -56,6 +59,8 @@ public class ClaimService {
         Claim response = claimRepository
                 .findFirstByMemberOutAndStatus(sysAuth.getMember(), ClaimStatusDict.NEW.id).orElse(null);
         if (response == null) return Optional.empty();
+        response.setStatus(ClaimStatusDict.IN_PROGRESS.id);
+        response = claimRepository.save(response);
         return Optional.of(response);
     }
 
