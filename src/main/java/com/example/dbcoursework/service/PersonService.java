@@ -1,9 +1,12 @@
 package com.example.dbcoursework.service;
 
+import com.example.dbcoursework.entity.Person;
 import com.example.dbcoursework.entity.local.BasicEntity;
+import com.example.dbcoursework.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,13 +14,33 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PersonService {
 
-    //TODO метод должен возвращать существует ли пользователь с данным именем и данным id
+    private final PersonRepository personRepository;
+
     public Boolean checkPersonByName(String name, Long id) {
-        return false;
+        Person person = personRepository.findFirstByNameAndId(name, id).orElse(null);
+        return person != null;
     }
 
-    //TODO регистрирует пользователя с заданными связями, возвращает невалидный optional или id новой сущнсоти
-    public Optional<Long> registerPerson(BasicEntity person, List<BasicEntity> org, List<BasicEntity> role) {
-        return Optional.empty();
+    public Optional<Long> registerPerson(BasicEntity basicPerson, List<BasicEntity> orgs, List<BasicEntity> roles) {
+        Person person = new Person();
+        person.setEnterData(LocalDateTime.now());
+        person.setIsDeleted(false);
+        person.setName(basicPerson.getName());
+        person = personRepository.save(person);
+        for (BasicEntity org : orgs) {
+            try {
+                personRepository.insertLinkOrg(org.getId(), person.getId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for (BasicEntity role : roles) {
+            try {
+                personRepository.insertLinkRole(role.getId(), person.getId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return Optional.of(person.getId());
     }
 }

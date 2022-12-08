@@ -68,7 +68,7 @@ public class ProxyController {
     @PostMapping("/claim")
     public ResponseEntity<String> createClaim(@RequestBody SecureClaimEntity secureClaimEntity) {
         if (secureService.checkAuthorization(secureClaimEntity.getSecure())) {
-            return claimService.createClaim(secureClaimEntity.getClaim())
+            return claimService.createClaim(secureClaimEntity.getClaim(), secureClaimEntity.getSecure().getLogin())
                     ? new ResponseEntity<>(HttpStatus.OK)
                     : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -103,11 +103,5 @@ public class ProxyController {
             return claimService.getAnswerById(secureEntity.getLogin(), claimId).orElse(null);
         }
         return null;
-    }
-
-    @GetMapping("/ping")
-    public ResponseEntity<String> ping() {
-        String r = claimRepository.findAll().get(0).getData();
-        return ResponseEntity.ok().body(r);
     }
 }

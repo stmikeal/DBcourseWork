@@ -22,7 +22,7 @@ public class SysAuth {
     Long id;
 
     @Column(name = "member_ref")
-    Long memberRef;
+    Long member;
 
     @Column(name = "username")
     String username;
